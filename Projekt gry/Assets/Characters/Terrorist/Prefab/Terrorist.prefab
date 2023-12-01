@@ -293,7 +293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 8973126419541039421}
   sensitivity: 200
-  xAngle: 0
+  playerSpineVerticalRotation: 0
   playerSpine: {fileID: 0}
 --- !u!114 &685752307073452528
 MonoBehaviour:

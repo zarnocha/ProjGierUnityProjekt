@@ -6,29 +6,25 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     public Transform playerCamera;
-    public float sensitivity = 200f;
-    public float playerSpineVerticalRotation = 0f;
     public Transform playerSpine;
-    private Transform playerCrosshair;
+
+    public float sensitivity = 200f;
+
+    public float playerSpineVerticalRotation = 0f;
+    public float playerSpeed = 10.0f;
 
     private CharacterController controller;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
 
-    private readonly float playerSpeed = 1.0f;
     private readonly float jumpHeight = 1.0f;
     private readonly float gravityValue = -9.81f;
 
     Animator playerAnimator;
 
-
-    private void Awake()
-    {
-        playerAnimator = GetComponent<Animator>();
-    }
-
     void Start()
     {
+        playerAnimator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -39,13 +35,8 @@ public class PlayerMove : MonoBehaviour
             if (child.CompareTag("Spine"))
             {
                 playerSpine = child;
-                Debug.Log("Znaleziono krêgos³up: " + playerSpine.name);
-            }
-
-            if (child.CompareTag("Crosshair"))
-            {
-                playerCrosshair = child;
-                Debug.Log("Znaleziono celownik: " + playerCrosshair.name);
+                //Debug.Log("Znaleziono krêgos³up: " + playerSpine.name);
+                break;
             }
         }
     }
@@ -87,6 +78,16 @@ public class PlayerMove : MonoBehaviour
         float mouseXMove = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
 
         transform.Rotate(Vector3.up * mouseXMove);
+
+        if (Input.GetMouseButton(0))
+        {
+            transform.GetComponent<Unit>().isShooting = true;
+        } 
+        else 
+        { 
+            transform.GetComponent<Unit>().isShooting = false;
+        }
+
     }
 
     private void LateUpdate()
@@ -108,6 +109,16 @@ public class PlayerMove : MonoBehaviour
         {
             playerSpine.localRotation = Quaternion.Euler(0f, 0f, -playerSpineVerticalRotation);
         }
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // to sprawdza, w jakiej strefie na mapie znajduje siê gracz
+        // u¿yjê tego do losowania strefy dla botów
+        if (other.transform.parent.gameObject.CompareTag("Zone"))
+        {
+            GameObject zone = other.transform.parent.gameObject;
+            //Debug.Log(zone.name);
+        }
     }
 }
