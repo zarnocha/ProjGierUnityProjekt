@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -35,7 +36,6 @@ public class PlayerMove : MonoBehaviour
             if (child.CompareTag("Spine"))
             {
                 playerSpine = child;
-                //Debug.Log("Znaleziono krêgos³up: " + playerSpine.name);
                 break;
             }
         }
@@ -87,7 +87,6 @@ public class PlayerMove : MonoBehaviour
         { 
             transform.GetComponent<Unit>().isShooting = false;
         }
-
     }
 
     private void LateUpdate()
@@ -101,11 +100,11 @@ public class PlayerMove : MonoBehaviour
         playerSpineVerticalRotation = Mathf.Clamp(playerSpineVerticalRotation, -85f, 85f);
 
         // Spine antyterrorysty trzeba obracaæ po innej osi w celu pochylenia, st¹d ten `if`
-        if (transform.CompareTag("Terrorist") || transform.CompareTag("TerroristPlayer"))
+        if (transform.CompareTag("TerroristPlayer"))
         {
             playerSpine.localRotation = Quaternion.Euler(playerSpineVerticalRotation, 0f, 0f);
         }
-        else if (transform.CompareTag("CounterTerrorist") || transform.CompareTag("CounterTerroristPlayer"))
+        else if (transform.CompareTag("CounterTerroristPlayer"))
         {
             playerSpine.localRotation = Quaternion.Euler(0f, 0f, -playerSpineVerticalRotation);
         }
@@ -113,7 +112,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // to sprawdza, w jakiej strefie na mapie znajduje siê gracz
+        // to sprawdza w jakiej strefie na mapie znajduje siê gracz
         // u¿yjê tego do losowania strefy dla botów
         if (other.transform.parent.gameObject.CompareTag("Zone"))
         {

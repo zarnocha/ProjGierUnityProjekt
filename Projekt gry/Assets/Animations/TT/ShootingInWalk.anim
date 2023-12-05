@@ -200,49 +200,6 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -13.447, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      - serializedVersion: 3
-        time: 0.016666668
-        value: {x: -13.107, y: 0, z: 0}
-        inSlope: {x: 0.3840027, y: 0, z: 0}
-        outSlope: {x: 0.3840027, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      - serializedVersion: 3
-        time: 0.25
-        value: {x: -13.083, y: 3.496, z: -0.792}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      - serializedVersion: 3
-        time: 0.56666666
-        value: {x: -13.106, y: -0.455, z: 0.104}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
         value: {x: 7.765, y: 56.544, z: 0.938}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
@@ -379,56 +336,6 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: {x: -0.461, y: 1.922, z: -0.015}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      - serializedVersion: 3
-        time: 0.016666668
-        value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: {x: -0.329, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      - serializedVersion: 3
-        time: 0.016666668
-        value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
   m_PositionCurves:
   - curve:
       serializedVersion: 2
@@ -520,15 +427,6 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 4071265442
-      attribute: 4
-      script: {fileID: 0}
-      typeID: 4
-      customType: 4
-      isPPtrCurve: 0
-      isIntCurve: 0
-      isSerializeReferenceCurve: 0
-    - serializedVersion: 2
       path: 1428664285
       attribute: 4
       script: {fileID: 0}
@@ -557,24 +455,6 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3591480217
-      attribute: 4
-      script: {fileID: 0}
-      typeID: 4
-      customType: 4
-      isPPtrCurve: 0
-      isIntCurve: 0
-      isSerializeReferenceCurve: 0
-    - serializedVersion: 2
-      path: 3892437698
-      attribute: 4
-      script: {fileID: 0}
-      typeID: 4
-      customType: 4
-      isPPtrCurve: 0
-      isIntCurve: 0
-      isSerializeReferenceCurve: 0
-    - serializedVersion: 2
-      path: 1500708467
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -1204,150 +1084,6 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -13.447
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: -13.107
-        inSlope: 0.3840027
-        outSlope: 0.3840027
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.25
-        value: -13.083
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.56666666
-        value: -13.106
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.25
-        value: 3.496
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.56666666
-        value: -0.455
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.25
-        value: -0.792
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.56666666
-        value: 0.104
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
         value: 7.765
         inSlope: 0
         outSlope: 0
@@ -1861,186 +1597,6 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.461
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1.922
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: -0.015
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: -0.329
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.016666668
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: localEulerAnglesRaw.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
-    classID: 4
-    script: {fileID: 0}
-    flags: 16
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
         value: -0.0113
         inSlope: 0
         outSlope: 0
@@ -2341,7 +1897,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2353,7 +1909,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2365,7 +1921,31 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2377,31 +1957,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2413,7 +1969,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2425,7 +1981,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2437,7 +1993,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2
+    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2510,114 +2066,6 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
     path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder/Terror:Terror:Terrorist_FreeChar_LeftArm/Terror:Terror:Terrorist_FreeChar_LeftForeArm
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder/Terror:Terror:Terrorist_FreeChar_RightArm
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_RightShoulder
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Terrorist_FreeChar_ArtStore3d/Terror:Terror:Terrorist_FreeChar_Hips/Terror:Terror:Terrorist_FreeChar_Spine/Terror:Terror:Terrorist_FreeChar_Spine1/Terror:Terror:Terrorist_FreeChar_Spine2/Terror:Terror:Terrorist_FreeChar_LeftShoulder
     classID: 4
     script: {fileID: 0}
     flags: 0

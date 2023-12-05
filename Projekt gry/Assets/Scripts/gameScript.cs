@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using static UnityEngine.GraphicsBuffer;
 
 public class GameScript : MonoBehaviour
 {
+    public bool considerPlayerPrefs = true;
+
     [Header("Opcje gameplayu")]
     [Header("Wybór zespołu gracza")]
     public Teams playerTeamChoice = Teams.Terrorist;
 
     [Header("Ilość graczy AI w każdej drużynie")]
-    [Range(0f, 5f)]
+    [Range(0f, 10f)]
     [SerializeField]
     private int CtPlayersAmount = 5;
-    [Range(0f, 5f)]
+    [Range(0f, 10f)]
     [SerializeField]
     private int TtPlayersAmount = 4;
 
@@ -46,7 +50,8 @@ public class GameScript : MonoBehaviour
     public enum Teams
     {
         CounterTerrorist,
-        Terrorist
+        Terrorist,
+        Spectator
     }
 
     // listy graczy w grze
@@ -57,12 +62,20 @@ public class GameScript : MonoBehaviour
     private List<GameObject> deadBodies = new();
 
     // lista poszczególnych elementów UI każdego gracza
-    private List<Text> roundTimeText = new();
-    private List<Text> scoreTTText = new();
-    private List<Text> scoreCTText = new();
+    private List<TextMeshProUGUI> roundTimeText = new();
+    private List<TextMeshProUGUI> scoreTTText = new();
+    private List<TextMeshProUGUI> scoreCTText = new();
+    
+    private List<TextMeshProUGUI> playersLeftCTText = new();
+    private List<TextMeshProUGUI> playersLeftTTText = new();
+    
+    private List<TextMeshProUGUI> allPlayersCTText = new();
+    private List<TextMeshProUGUI> allPlayersTTText = new();
 
     private Transform respawnCT;
     private Transform respawnTT;
+
+    private Camera waitingCamera;
 
     private bool isRoundRunning = false;
 
@@ -70,6 +83,56 @@ public class GameScript : MonoBehaviour
     private int roundsWonByCT = 0;
     private int roundsWonByTT = 0;
 
+    // limit liczby rund
+    private int roundLimit = 15;
+
+    private Teams whoWonRound;
+    private TextMeshProUGUI whoWonRoundText;
+
+    private bool isPlayerAlive = false;
+
+    /// <summary>
+    /// Indeks aktywnej kamery.
+    /// 0 to kamera `waitingCamera`, czyli widok z góry z wynikiem
+    /// kamery od 1 w górę to kamery botów
+    /// </summary>
+    private int activeCamera = 0;
+
+    /// <summary>
+    /// Lista kamer dostępnych do poglądu, gdy gracz nie żyje bądź jest widzem
+    /// </summary>
+    private List<Camera> cameras = new();
+
+    private float howLongPressingEsc = 0f;
+    private float requiredHoldTimeToExit = 10f;
+
+    private void Awake()
+    {
+        if (considerPlayerPrefs)
+        {
+            string choice = PlayerPrefs.GetString("playerTeamChoice");
+
+            if (choice == "Antyterroryści")
+            {
+                playerTeamChoice = Teams.CounterTerrorist;
+            }
+            else if (choice == "Terroryści")
+            {
+                playerTeamChoice = Teams.Terrorist;
+            }
+            else
+            {
+                playerTeamChoice = Teams.Spectator;
+            }
+
+            roundLimit = PlayerPrefs.GetInt("RoundLimit");
+            roundTime = 60 * PlayerPrefs.GetInt("RoundTimeMinutes") + PlayerPrefs.GetInt("RoundTimeSeconds");
+            TimeBetweenRounds = 60 * PlayerPrefs.GetInt("TimeBetweenRoundsMinutes") + PlayerPrefs.GetInt("TimeBetweenRoundsSeconds");
+            TimeBetweenRounds = 60 * PlayerPrefs.GetInt("TimeBetweenRoundsMinutes") + PlayerPrefs.GetInt("TimeBetweenRoundsSeconds");
+            CtPlayersAmount = PlayerPrefs.GetInt("CtPlayersAmount");
+            TtPlayersAmount = PlayerPrefs.GetInt("TtPlayersAmount");
+        }
+    }
     void Start()
     {
         // kopiujemy oryginalny czas do drugiej zmiennej po to, żeby mieć dostęp do oryginalnej wartości między rundami
@@ -78,6 +141,13 @@ public class GameScript : MonoBehaviour
         // to samo poniżej, tylko dla odstępu między rundami
         timeBetweenRoundsCountdown = TimeBetweenRounds;
 
+        // kamera, która będzie wyświetlać mapę od góry w trakcie oczekiwania na nową rundę
+        GameObject waitingCameraObject = GameObject.FindGameObjectWithTag("WaitingCamera");
+        waitingCamera = waitingCameraObject.GetComponent<Camera>();
+        cameras.Add(waitingCamera);
+
+        whoWonRoundText = GameObject.FindWithTag("WhoWonRound").GetComponent<TextMeshProUGUI>();
+
         RoundStart();
     }
 
@@ -85,10 +155,95 @@ public class GameScript : MonoBehaviour
     {
         // z klatki na klatkę sprawdzam czy wszyscy żyją i aktualizuję im czas na UI
         SetTimeOnUi();
+        SetAlivePlayersOnUi();
         UpdatePlayers();
+        UpdateCameras();
+
+        // jeżeli trzymany jest ESC przez 10s to gracz wraca do menu głównego
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            howLongPressingEsc += Time.deltaTime;
+            if (howLongPressingEsc >= requiredHoldTimeToExit)
+            {
+                SceneManager.LoadScene(0);
+            }
+        }
+        else howLongPressingEsc = 0f;
+
+
+        // koniec gry
+        if (roundsWonByCT + roundsWonByTT == roundLimit)
+        {
+            isRoundRunning = false;
+           
+            // ustalamy kto wygrał, zapisujemy wynik końcowy oraz zwycięzcę, żeby wyświetlić te dane na scenie 3 (Game over scene)
+            string WhoWon = (roundsWonByCT > roundsWonByTT) ? "CT" : (roundsWonByCT < roundsWonByTT) ? "TT" : "Remis";
+            PlayerPrefs.SetString("WhoWon", WhoWon);
+            PlayerPrefs.SetInt("ScoreCT", roundsWonByCT);
+            PlayerPrefs.SetInt("ScoreTT", roundsWonByTT);
+
+            SceneManager.LoadScene(3);
+        }
 
         if (isRoundRunning)
         {
+            // jeżeli gracz wybierze rolę widza to będzie miał ciągle widok "oczekiwania na rundę"
+            if (playerTeamChoice != Teams.Spectator)
+            {
+                waitingCamera.enabled = false;
+            }
+
+            IsPlayerAlive();
+
+            if (!isPlayerAlive)
+            {
+                // mamy dostęp do podglądania gry botów z widoku pierwszej osoby
+                // zmiana kamer - LPM i PPM
+                if (activeCamera == 0) waitingCamera.enabled = true;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    int amountOfAllPlayers = playersCtList.Count + playersTtList.Count;
+                    cameras[activeCamera].enabled = false;
+
+                    if (activeCamera == amountOfAllPlayers)
+                    {
+                        activeCamera = 0;
+                    } else activeCamera++;
+
+                    cameras[activeCamera].enabled = true;
+                } 
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    int amountOfAllPlayers = playersCtList.Count + playersTtList.Count;
+                    cameras[activeCamera].enabled = false;
+
+                    if (activeCamera -1 < 0)
+                    {
+                        activeCamera = amountOfAllPlayers;
+                    }
+                    else activeCamera--;
+
+                    cameras[activeCamera].enabled = true;
+                }
+
+                // zabezpieczenie przed tym, żeby iterator kamery nie wyszedł poza listę
+                if (activeCamera > cameras.Count || activeCamera < 0)
+                {
+                    activeCamera = 0;
+                }
+
+                try
+                {
+                    cameras[activeCamera].enabled = true;
+                }
+                catch (System.Exception)
+                {
+                    cameras.RemoveAt(activeCamera);
+                    activeCamera = 0;
+                    cameras[activeCamera].enabled = true;
+                }
+            }
+
             if (roundTimeCountdown > 0)
             {
                 roundTimeCountdown -= Time.deltaTime;
@@ -117,8 +272,12 @@ public class GameScript : MonoBehaviour
         }
 
         // jeżeli runda dobiegła końca
-        else if (!isRoundRunning)
+        else if (!isRoundRunning && roundsWonByCT + roundsWonByTT < roundLimit)
         {
+            waitingCamera.enabled = true;
+            activeCamera = 0;
+            UpdateTextBetweenRounds();
+
             if (timeBetweenRoundsCountdown > 0)
             {
                 timeBetweenRoundsCountdown -= Time.deltaTime;
@@ -140,6 +299,8 @@ public class GameScript : MonoBehaviour
         RemoveDeadBodies();
         roundTimeCountdown = roundTime;
 
+        whoWonRoundText.text = "";
+
         respawnCT = GameObject.FindGameObjectWithTag("RespawnCT").transform;
         respawnTT = GameObject.FindGameObjectWithTag("RespawnTT").transform;
 
@@ -152,12 +313,17 @@ public class GameScript : MonoBehaviour
             Vector3 randomSpawnPositionVector = RandomSpawnPosition(respawnCT);
             GameObject player = Instantiate(PlayerCT, randomSpawnPositionVector, Quaternion.identity);
             playersCtList.Add(player);
+            isPlayerAlive = true;
         }
         else if (playerTeamChoice == Teams.Terrorist)
         {
             Vector3 randomSpawnPositionVector = RandomSpawnPosition(respawnTT);
             GameObject player = Instantiate(PlayerTT, randomSpawnPositionVector, Quaternion.identity);
             playersTtList.Add(player);
+            isPlayerAlive = true;
+        } else
+        {
+            isPlayerAlive = false;
         }
 
         for (int i = 0; i < CtPlayersAmount; i++)
@@ -165,6 +331,7 @@ public class GameScript : MonoBehaviour
             Vector3 randomSpawnPositionVector = RandomSpawnPosition(respawnCT);
             GameObject newCtBot = Instantiate(BotCT, randomSpawnPositionVector, Quaternion.identity);
             playersCtList.Add(newCtBot);
+            cameras.Add(newCtBot.GetComponentInChildren<Camera>());
         }
 
         for (int i = 0; i < TtPlayersAmount; i++)
@@ -172,14 +339,16 @@ public class GameScript : MonoBehaviour
             Vector3 randomSpawnPositionVector = RandomSpawnPosition(respawnTT);
             GameObject newTtBot = Instantiate(BotTT, randomSpawnPositionVector, Quaternion.identity);
             playersTtList.Add(newTtBot);
+            cameras.Add(newTtBot.GetComponentInChildren<Camera>());
         }
 
         // zniszczenie obiektów UI których już nie ma w grze i pobranie nowych z graczy
         DestroyAndAssignUiTexts();
 
-        // ustawiamy graczom aktualny wynik gry
         UpdateUiScore(Teams.CounterTerrorist);
         UpdateUiScore(Teams.Terrorist);
+
+        UpdateAllPlayersCountOnUi();
 
         isRoundRunning = true;
     }
@@ -190,18 +359,24 @@ public class GameScript : MonoBehaviour
     void RoundForCT()
     {
         RoundEnd();
+
+        whoWonRound = Teams.CounterTerrorist;
         roundsWonByCT++;
+
         UpdateUiScore(Teams.CounterTerrorist);
         Debug.Log("CT wygrało rundę");
     }
-
+    
     /// <summary>
     /// Funkcja deklarująca zwycięstwo TT i wywołująca RoundsEnd()
     /// </summary>
     void RoundForTT()
     {
         RoundEnd();
+
+        whoWonRound = Teams.Terrorist;
         roundsWonByTT++;
+
         UpdateUiScore(Teams.Terrorist);
         Debug.Log("TT wygrało rundę");
     }
@@ -213,6 +388,7 @@ public class GameScript : MonoBehaviour
     {
         isRoundRunning = false;
         roundTimeCountdown = 0;
+        
         Debug.Log("Koniec rundy");
     }
 
@@ -261,7 +437,7 @@ public class GameScript : MonoBehaviour
         if (whichTeam == Teams.Terrorist)
         {
             int score = roundsWonByTT;
-            foreach (Text scoreText in scoreTTText)
+            foreach (TextMeshProUGUI scoreText in scoreTTText)
             {
                 scoreText.text = score.ToString();
             }
@@ -269,10 +445,48 @@ public class GameScript : MonoBehaviour
         else if (whichTeam == Teams.CounterTerrorist)
         {
             int score = roundsWonByCT;
-            foreach (Text scoreText in scoreCTText)
+            foreach (TextMeshProUGUI scoreText in scoreCTText)
             {
                 scoreText.text = score.ToString();
             }
+        }
+    }
+
+    /// <summary>
+    /// Funkcja wywoływana po zakończeniu rundy. Aktualizuje tekst wyświetlany między rundami - kto wygrał rundę
+    /// </summary>
+    void UpdateTextBetweenRounds()
+    {
+        if (whoWonRound == Teams.CounterTerrorist)
+        {
+            whoWonRoundText.text = "CT";
+            whoWonRoundText.color = new Color32(39, 88, 224, 255);
+        }
+        else if (whoWonRound == Teams.Terrorist)
+        {
+            whoWonRoundText.text = "TT";
+            whoWonRoundText.color = new Color32(224, 39, 39, 255);
+        }
+    }
+
+    void UpdateAllPlayersCountOnUi()
+    {
+        UpdateUiTexts();
+
+        int ct = CtPlayersAmount;
+        int tt = TtPlayersAmount;
+
+        if (playerTeamChoice == Teams.CounterTerrorist) ct++;
+        if (playerTeamChoice == Teams.Terrorist) tt++;
+        
+        foreach (TextMeshProUGUI text in allPlayersCTText)
+        {
+            text.text = ct.ToString();
+        }
+
+        foreach (TextMeshProUGUI text in allPlayersTTText)
+        {
+            text.text = tt.ToString();
         }
     }
 
@@ -283,12 +497,27 @@ public class GameScript : MonoBehaviour
     {
         UpdateUiTexts();
 
-        foreach (Text text in roundTimeText)
+        foreach (TextMeshProUGUI text in roundTimeText)
         {
             float minutes = Mathf.FloorToInt(roundTimeCountdown / 60);
             float seconds = Mathf.FloorToInt(roundTimeCountdown % 60);
 
             text.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+    }
+
+    void SetAlivePlayersOnUi()
+    {
+        UpdateUiTexts();
+
+        foreach (TextMeshProUGUI text in playersLeftCTText)
+        {
+            text.text = playersCtList.Count.ToString();
+        }
+
+        foreach (TextMeshProUGUI text in playersLeftTTText)
+        {
+            text.text = playersTtList.Count.ToString();
         }
     }
 
@@ -307,7 +536,7 @@ public class GameScript : MonoBehaviour
                 // jeżeli przetrzymujemy obiekt, który po powstaniu dołączył do listy, i chcemy go zniszczyć Destroy()'em
                 // to najpierw należy go usunąć z listy a potem wywołać Destroy()
                 // w innym przypadku będą problemy z kolejnością, nullami (null pointer exception) i różne inne nieprawidłowości
-                Text roundTimeTextObject = roundTimeText[i];
+                TextMeshProUGUI roundTimeTextObject = roundTimeText[i];
                 roundTimeText.RemoveAt(i);
                 Destroy(roundTimeTextObject);
             }
@@ -317,7 +546,7 @@ public class GameScript : MonoBehaviour
         {
             if (!scoreCTText[i])
             {
-                Text scoreCTTextObject = scoreCTText[i];
+                TextMeshProUGUI scoreCTTextObject = scoreCTText[i];
                 scoreCTText.RemoveAt(i);
                 Destroy(scoreCTTextObject);
             }
@@ -327,9 +556,51 @@ public class GameScript : MonoBehaviour
         {
             if (!scoreTTText[i])
             {
-                Text scoreTTTextObject = scoreTTText[i];
+                TextMeshProUGUI scoreTTTextObject = scoreTTText[i];
                 scoreTTText.RemoveAt(i);
                 Destroy(scoreTTTextObject);
+            }
+        }
+
+        // players left
+        for (int i = playersLeftCTText.Count - 1; i >= 0; i--)
+        {
+            if (!playersLeftCTText[i])
+            {
+                TextMeshProUGUI playersLeftCTTextObject = playersLeftCTText[i];
+                playersLeftCTText.RemoveAt(i);
+                Destroy(playersLeftCTTextObject);
+            }
+        }
+
+        for (int i = playersLeftTTText.Count - 1; i >= 0; i--)
+        {
+            if (!playersLeftTTText[i])
+            {
+                TextMeshProUGUI playersLeftTTTextObject = playersLeftTTText[i];
+                playersLeftTTText.RemoveAt(i);
+                Destroy(playersLeftTTTextObject);
+            }
+        }
+
+        // all players
+        for (int i = allPlayersCTText.Count - 1; i >= 0; i--)
+        {
+            if (!allPlayersCTText[i])
+            {
+                TextMeshProUGUI allPlayersCTTextObject = allPlayersCTText[i];
+                allPlayersCTText.RemoveAt(i);
+                Destroy(allPlayersCTTextObject);
+            }
+        }
+
+        for (int i = allPlayersTTText.Count - 1; i >= 0; i--)
+        {
+            if (!allPlayersTTText[i])
+            {
+                TextMeshProUGUI allPlayersTTTextObject = allPlayersTTText[i];
+                allPlayersTTText.RemoveAt(i);
+                Destroy(allPlayersTTTextObject);
             }
         }
     }
@@ -365,44 +636,110 @@ public class GameScript : MonoBehaviour
     {
         for (int i = roundTimeText.Count - 1; i >= 0; i--)
         {
-            Text roundTimeTextObject = roundTimeText[i];
+            TextMeshProUGUI roundTimeTextObject = roundTimeText[i];
             roundTimeText.RemoveAt(i);
             Destroy(roundTimeTextObject);
         }
 
         for (int i = scoreCTText.Count - 1; i >= 0; i--)
         {
-            Text scoreCTTextObject = scoreCTText[i];
+            if (scoreCTText[i] != null) continue;
+            TextMeshProUGUI scoreCTTextObject = scoreCTText[i];
             scoreCTText.RemoveAt(i);
             Destroy(scoreCTTextObject);
         }
 
         for (int i = scoreTTText.Count - 1; i >= 0; i--)
         {
-            Text scoreTTTextObject = scoreTTText[i];
+            if (scoreTTText[i] != null) continue;
+            TextMeshProUGUI scoreTTTextObject = scoreTTText[i];
             scoreTTText.RemoveAt(i);
             Destroy(scoreTTTextObject);
+        }
+
+        // players left
+        for (int i = playersLeftCTText.Count - 1; i >= 0; i--)
+        {
+            if (playersLeftCTText[i] != null) continue;
+            TextMeshProUGUI playersLeftCTTextObject = playersLeftCTText[i];
+            playersLeftCTText.RemoveAt(i);
+            Destroy(playersLeftCTTextObject);
+        }
+
+        for (int i = playersLeftTTText.Count - 1; i >= 0; i--)
+        {
+            if (playersLeftTTText[i] != null) continue;
+            TextMeshProUGUI playersLeftTTTextObject = playersLeftTTText[i];
+            playersLeftTTText.RemoveAt(i);
+            Destroy(playersLeftTTTextObject);
+        }
+
+        // all players
+        for (int i = allPlayersCTText.Count - 1; i >= 0; i--)
+        {
+            if (allPlayersCTText[i] != null) continue;
+            TextMeshProUGUI allPlayersCTTextObject = allPlayersCTText[i];
+            allPlayersCTText.RemoveAt(i);
+            Destroy(allPlayersCTTextObject);
+        }
+
+        for (int i = allPlayersTTText.Count - 1; i >= 0; i--)
+        {
+            if (allPlayersTTText[i] != null) continue;
+            TextMeshProUGUI allPlayersTTTextObject = allPlayersTTText[i];
+            allPlayersTTText.RemoveAt(i);
+            Destroy(allPlayersTTTextObject);
         }
 
         List<GameObject> roundTimesGameObjects = new(GameObject.FindGameObjectsWithTag("RoundTime"));
         foreach (var textGameObject in roundTimesGameObjects)
         {
-            Text text = textGameObject.transform.GetComponent<Text>();
+            TextMeshProUGUI text = textGameObject.transform.GetComponent<TextMeshProUGUI>();
             roundTimeText.Add(text);
         }
 
         List<GameObject> scoreCTGameObjects = new(GameObject.FindGameObjectsWithTag("ScoreCT"));
         foreach (var scoreCTGameObject in scoreCTGameObjects)
         {
-            Text text = scoreCTGameObject.transform.GetComponent<Text>();
+            TextMeshProUGUI text = scoreCTGameObject.transform.GetComponent<TextMeshProUGUI>();
             scoreCTText.Add(text);
         }
 
         List<GameObject> scoreTTGameObjects = new(GameObject.FindGameObjectsWithTag("ScoreTT"));
         foreach (var scoreTTGameObject in scoreTTGameObjects)
         {
-            Text text = scoreTTGameObject.transform.GetComponent<Text>();
+            TextMeshProUGUI text = scoreTTGameObject.transform.GetComponent<TextMeshProUGUI>();
             scoreTTText.Add(text);
+        }
+
+        // players left
+        List<GameObject> playersLeftCTObjects = new(GameObject.FindGameObjectsWithTag("PlayersLeftCT"));
+        foreach (var playersLeftCTObject in playersLeftCTObjects)
+        {
+            TextMeshProUGUI text = playersLeftCTObject.transform.GetComponent<TextMeshProUGUI>();
+            playersLeftCTText.Add(text);
+        }
+
+        List<GameObject> playersLeftTTObjects = new(GameObject.FindGameObjectsWithTag("PlayersLeftTT"));
+        foreach (var playersLeftTTObject in playersLeftTTObjects)
+        {
+            TextMeshProUGUI text = playersLeftTTObject.transform.GetComponent<TextMeshProUGUI>();
+            playersLeftTTText.Add(text);
+        }
+
+        // all players
+        List<GameObject> allPlayersCTObjects = new(GameObject.FindGameObjectsWithTag("AllPlayersCT"));
+        foreach (var allPlayersCTObject in allPlayersCTObjects)
+        {
+            TextMeshProUGUI text = allPlayersCTObject.transform.GetComponent<TextMeshProUGUI>();
+            allPlayersCTText.Add(text);
+        }
+
+        List<GameObject> allPlayersTTObjects = new(GameObject.FindGameObjectsWithTag("AllPlayersTT"));
+        foreach (var allPlayersTTObject in allPlayersTTObjects)
+        {
+            TextMeshProUGUI text = allPlayersTTObject.transform.GetComponent<TextMeshProUGUI>();
+            allPlayersTTText.Add(text);
         }
     }
 
@@ -429,9 +766,7 @@ public class GameScript : MonoBehaviour
             if (playersTtList[i].GetComponent<Unit>().HP <= minHP)
             {
                 Debug.Log("Usuwanie martwego TT z listy graczy");
-                GameObject playerToRemove = playersTtList[i];
                 playersTtList.RemoveAt(i);
-                Destroy(playerToRemove);
             }
         }
 
@@ -444,9 +779,7 @@ public class GameScript : MonoBehaviour
             if (playersCtList[i].GetComponent<Unit>().HP <= minHP)
             {
                 Debug.Log("Usuwanie martwego CT z listy graczy");
-                GameObject playerToRemove = playersCtList[i];
                 playersCtList.RemoveAt(i);
-                Destroy(playerToRemove);
             }
         }
     }
@@ -475,6 +808,38 @@ public class GameScript : MonoBehaviour
             GameObject deadBodyToRemove = deadBodies[i];
             deadBodies.RemoveAt(i);
             Destroy(deadBodyToRemove);
+        }
+    }
+    
+    /// <summary>
+    /// Funkcja do sprawdzania czy gracz jest w grze
+    /// </summary>
+    private void IsPlayerAlive()
+    {
+        GameObject playerCt = GameObject.FindGameObjectWithTag("CounterTerroristPlayer");
+        GameObject playerTt = GameObject.FindGameObjectWithTag("TerroristPlayer");
+
+        if ( (playerCt != null && !playerCt.Equals(null)) || (playerTt != null && !playerTt.Equals(null)) )
+        {
+            isPlayerAlive = true;
+        } else
+        {
+            isPlayerAlive = false;
+        }
+    }
+
+    /// <summary>
+    /// Funkcja do usuwania nieaktywnych kamer
+    /// </summary>
+    private void UpdateCameras()
+    {
+        for (int i = 1; i < cameras.Count; i++)
+        {
+            if (cameras[i] == null && cameras[i].Equals(null))
+            {
+                if (activeCamera == i) activeCamera = 0;
+                cameras.RemoveAt(i);
+            }
         }
     }
 }

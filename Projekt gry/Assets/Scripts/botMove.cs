@@ -8,9 +8,14 @@ public class BotMove : MonoBehaviour
 {
     public NavMeshAgent agent;
     
+    // aktualny stan bota (co robi)
     public BotStates state = BotStates.walking;
+
     // kto jest na celowniku bota (najbli¿szy widoczny przeciwnik)
     public GameObject attackTarget;
+
+    public Transform botSpine;
+    public float botSpineVerticalRotation = 0f;
 
     private Camera botCamera;
     
@@ -44,7 +49,6 @@ public class BotMove : MonoBehaviour
         dead 
     }
 
-
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -57,12 +61,35 @@ public class BotMove : MonoBehaviour
         // przydzielenie losowego czasu skanu pola widzenia
         enemyScanSpeed = Random.Range(0.2f, 1f);
         enemyScanSpeedCountdown = enemyScanSpeed;
+
+        // "resetowanie" krêgos³upa bota - ¿eby patrzy³ przed siebie
+
+        botSpineVerticalRotation = 0;
+
+        if (transform.CompareTag("Terrorist"))
+        {
+            botSpine.localRotation = Quaternion.Euler(botSpineVerticalRotation, 0f, 0f);
+        }
+        else if (transform.CompareTag("CounterTerrorist"))
+        {
+            botSpine.localRotation = Quaternion.Euler(0f, 0f, -botSpineVerticalRotation);
+        }
     }
 
     void Update()
     {
         // funkcja pobieraj¹ca ¿ywych przeciwników ze skryptu gry
         GetEnemies();
+        
+        // TODO:
+        // time.deltatime > 5f
+        // LookAround();
+
+        // TODO:
+        // jeœli dostaje damage to odwraca siê dopóki nie napotka przeciwnika
+
+        // TODO:
+        // pomys³: je¿eli liczba kul bota jest 25 - 30 to bot ucieka ¿eby j¹ prze³adowaæ
 
         if (enemyScanSpeedCountdown > 0)
         {
@@ -75,6 +102,7 @@ public class BotMove : MonoBehaviour
             enemyScanSpeedCountdown = enemyScanSpeed;
         }
 
+        // je¿eli bot widzi przeciwnika to zmienia stan na strzelanie, przestaje iœæ i zaczyna strzelaæ
         if (attackTarget)
         {
             state = BotStates.firing;
@@ -88,6 +116,9 @@ public class BotMove : MonoBehaviour
         {
             animator.SetBool("isWalking", true);
             agent.isStopped = false;
+
+            // po up³ywie pewnego czasu bot przemieszcza siê na inn¹ pozycjê na mapie
+            // do zast¹pienia poruszaniem siê po strefach
             if (changePositionCountdown > 0)
             {
                 changePositionCountdown -= Time.deltaTime;
@@ -97,6 +128,7 @@ public class BotMove : MonoBehaviour
                 changePosition = Random.Range(5f, 15f);
                 changePositionCountdown = changePosition;
 
+                // wartoœci w Range s¹ przybli¿onymi rogami mapy
                 Vector3 newPositionToGo = new Vector3(Random.Range(-41f, 113f), 0f, Random.Range(-80f, 71f));
 
                 agent.SetDestination(newPositionToGo);
@@ -105,11 +137,13 @@ public class BotMove : MonoBehaviour
 
         if (state == BotStates.firing)
         {
-            // bot pod¹¿a za najbli¿szym przeciwnikiem kamer¹
-            transform.LookAt(attackTarget.transform);
+            // bot pod¹¿a za najbli¿szym przeciwnikiem kamer¹ poziomo
+            Vector3 targetOnHorizontalAxis = new(attackTarget.transform.position.x, transform.position.y, attackTarget.transform.position.z);
+            transform.LookAt(targetOnHorizontalAxis);
 
             animator.SetBool("isWalking", false);
             animator.SetBool("isShooting", true);
+
             agent.isStopped = true;
             
             transform.GetComponent<Unit>().isShooting = true;
@@ -118,7 +152,49 @@ public class BotMove : MonoBehaviour
         {
             animator.SetBool("isShooting", false);
             transform.GetComponent<Unit>().isShooting = false;
+
+            botSpineVerticalRotation = 0f;
         }
+    }
+
+    private void LateUpdate() 
+    {
+        if (state == BotStates.firing)
+        {
+            // bot pod¹¿a za najbli¿szym przeciwnikiem kamer¹ pionowo
+            Vector3 direction = attackTarget.transform.position - transform.position;
+            botSpineVerticalRotation = Quaternion.LookRotation(direction).eulerAngles.x;
+
+            float distance = Vector3.Distance(attackTarget.transform.position, transform.position);
+
+            // to naprawia b³¹d, ¿e mo¿na by³o wejœæ botowi-terroryœcie na g³owê a on nie by³ w stanie mnie trafiæ
+            if (distance < 2.8f)
+            {
+                if (transform.CompareTag("Terrorist"))
+                {
+                    botCamera.transform.localRotation = Quaternion.Euler(-11, 0, 0);
+                }
+            }
+            else
+            {
+                if (transform.CompareTag("Terrorist"))
+                {
+                    botCamera.transform.localRotation = Quaternion.Euler(-12.5f, 0, 0);
+                }
+            }
+            transform.GetComponent<Unit>().AddRecoilToBot();
+        } 
+
+        // Spine antyterrorysty trzeba obracaæ po innej osi w celu pochylenia, st¹d ten `if`
+        // kod do obracania krêgos³upa po pionowej osi, gdy przeciwnik jest wy¿ej, np. podskakuje
+        if (transform.CompareTag("Terrorist"))
+        {
+            botSpine.localRotation = Quaternion.Euler(botSpineVerticalRotation, 0f, 0f);
+        }
+        else if (transform.CompareTag("CounterTerrorist"))
+        {
+            botSpine.localRotation = Quaternion.Euler(0f, 0f, -botSpineVerticalRotation);
+        } 
     }
 
     /// <summary>
@@ -207,5 +283,4 @@ public class BotMove : MonoBehaviour
             attackTarget = null;
         }
     }
-
 }

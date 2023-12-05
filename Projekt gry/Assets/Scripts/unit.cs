@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,10 +15,11 @@ public class Unit : MonoBehaviour
 
     [Tooltip("prefab zw³ok postaci")]
     public GameObject deadBody;
-    [Tooltip("audio strza³ów broni")]
-    public AudioSource shootingSound;
 
-    private Camera playerCamera;
+    [Tooltip("audio strza³ów broni")]
+    public AudioClip weaponClip;
+
+    public Camera playerCamera;
     private float lastShoot = 0;
 
     private Animator unitAnimator;
@@ -30,10 +32,16 @@ public class Unit : MonoBehaviour
     private GameObject gameScriptObject;
     private GameScript scriptOfGame;
 
+    private TextMeshProUGUI HpText;
+    private TextMeshProUGUI BulletsLeftText;
+
     void Start()
     {
         unitAnimator = GetComponent<Animator>();
         playerCamera = GetComponentInChildren<Camera>();
+
+        FindHPOnUI();
+        FindBulletsLeftOnUI();
 
         // szukamy obiektu gry i pobieramy jego skrypt, ¿eby mieæ dostêp do funkcji gry
         gameScriptObject = GameObject.FindGameObjectWithTag("GameScript");
@@ -42,42 +50,8 @@ public class Unit : MonoBehaviour
 
     void Update()
     {
-        if (isShooting)
-        {
-            // zabezpieczenie, aby strza³y nie zosta³y wystrzelone w jednym momencie przy trzymaniu LPM
-            // innymi s³owy - co ile czasu ma nastêpowaæ strza³
-            // TODO: dodaæ reloading
-
-            if (Time.time >= lastShoot)
-            {
-                Fire();
-                shootingSound.Play();
-                unitAnimator.SetBool("isShooting", true);
-                lastShoot = Time.time + shootingDelay;
-
-                // je¿eli gracz wystrzeliwuje pociski ca³¹ seri¹ (wiêcej ni¿ 2),
-                // to bêdzie mu ciê¿ej trafiæ poprzez 'odrzut'
-                if (transform.CompareTag("TerroristPlayer") || transform.CompareTag("CounterTerroristPlayer"))
-                {
-                    if (howManyBulletsFired > 2)
-                    {
-                        transform.GetComponent<PlayerMove>().playerSpineVerticalRotation -= Random.Range(0.5f, 0.6f);
-                        transform.Rotate(new Vector3(0f, Random.Range(-0.2f, 0.2f), 0f));
-                    }
-                    else
-                    {
-                        transform.GetComponent<PlayerMove>().playerSpineVerticalRotation -= Random.Range(0.2f, 0.3f);
-                        transform.Rotate(new Vector3(0f, Random.Range(-0.1f, 0.1f), 0f));
-                    }
-                }
-                howManyBulletsFired++;
-            }
-        } 
-        else
-        {
-            howManyBulletsFired = 0;
-            unitAnimator.SetBool("isShooting", false);
-        }
+        SetHPOnUi();
+        SetBulletsLeftOnUi();
         
         if (HP <= MinHP)
         {
@@ -90,21 +64,53 @@ public class Unit : MonoBehaviour
             {
                 GameObject deadBodyGameObject = Instantiate(deadBody, transform.position, transform.rotation);
                 scriptOfGame.AddDeadBodyToList(deadBodyGameObject);
+                Destroy(transform.gameObject);
             }
-
         }
     }
 
+    private void LateUpdate()
+    {
+        if (isShooting)
+        {
+            // zabezpieczenie, aby strza³y nie zosta³y wystrzelone w jednym momencie przy trzymaniu LPM
+            // innymi s³owy - co ile czasu ma nastêpowaæ strza³
+
+            if (Time.time >= lastShoot)
+            {
+                Fire();
+                AudioSource.PlayClipAtPoint(weaponClip, transform.position);
+                unitAnimator.SetBool("isShooting", true);
+                lastShoot = Time.time + shootingDelay;
+
+                AddRecoilToPlayer();
+
+                howManyBulletsFired++;
+            }
+        }
+        else
+        {
+            howManyBulletsFired = 0;
+            unitAnimator.SetBool("isShooting", false);
+        }
+
+        if (howManyBulletsFired >= 30)
+        {
+            // TODO: reloading
+            howManyBulletsFired = 0;
+        }
+
+    }
     private void Fire()
     {
         RaycastHit ray;
         Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out ray);
-        
+
         // w celu sprawdzenia gdzie strzelaj¹ boty
         //if (!transform.CompareTag("TerroristPlayer") && !transform.CompareTag("CounterTerroristPlayer"))
         //{
-            // Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 1000f, Color.red);
-        //}
+        //    Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 1000f, Color.red, .5f);
+        //} 
 
         if (ray.collider)
         {
@@ -131,14 +137,93 @@ public class Unit : MonoBehaviour
         }
     }
 
+
     public void DealDamage(int damage)
     {
         HP -= damage;
-        Debug.Log("Zadano damage: " + damage + "\n HP: " + HP);
+        //Debug.Log("Zadano damage: " + damage + "\n HP: " + HP);
     }
 
     public void SetDeadAnimationEnd()
     {
         deadAnimationEnded = true;
+    }
+
+    private void FindHPOnUI()
+    {
+        bool found = false;
+        foreach (Transform child in playerCamera.transform)
+        {
+            if (child.CompareTag("UI"))
+            {
+                foreach (Transform childForHP in child)
+                {
+                    if (childForHP.CompareTag("HP"))
+                    {
+                        HpText = childForHP.GetComponent<TextMeshProUGUI>();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+        }
+    }
+
+    private void SetHPOnUi()
+    {
+        HpText.text = HP.ToString();
+    }
+
+    private void FindBulletsLeftOnUI()
+    {
+        bool found = false;
+        foreach (Transform child in playerCamera.transform)
+        {
+            if (child.CompareTag("UI"))
+            {
+                foreach (Transform childForBulletsLeft in child)
+                {
+                    if (childForBulletsLeft.CompareTag("BulletsLeft"))
+                    {
+                        BulletsLeftText = childForBulletsLeft.GetComponent<TextMeshProUGUI>();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+        }
+    }
+
+    private void SetBulletsLeftOnUi()
+    {
+        BulletsLeftText.text = howManyBulletsFired.ToString();
+    }
+
+    public void AddRecoilToBot()
+    {
+        if (transform.CompareTag("Terrorist") || transform.CompareTag("CounterTerrorist"))
+        {
+            transform.GetComponent<BotMove>().botSpineVerticalRotation -= Random.Range(howManyBulletsFired/15f, howManyBulletsFired/10f);
+            transform.Rotate(new Vector3(0f, Random.Range(-howManyBulletsFired / 40f, howManyBulletsFired / 40f), 0f));
+        }
+    }
+
+    public void AddRecoilToPlayer()
+    {
+        if (transform.CompareTag("TerroristPlayer") || transform.CompareTag("CounterTerroristPlayer"))
+        {
+            if (howManyBulletsFired > 2)
+            {
+                transform.GetComponent<PlayerMove>().playerSpineVerticalRotation -= Random.Range(0.5f, 0.6f);
+                transform.Rotate(new Vector3(0f, Random.Range(-0.2f, 0.2f), 0f));
+            }
+            else
+            {
+                transform.GetComponent<PlayerMove>().playerSpineVerticalRotation -= Random.Range(0.2f, 0.3f);
+                transform.Rotate(new Vector3(0f, Random.Range(-0.1f, 0.1f), 0f));
+            }
+        }
     }
 }
